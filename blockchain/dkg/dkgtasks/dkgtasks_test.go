@@ -13,7 +13,7 @@ import (
 	"github.com/MadBase/MadNet/crypto/bn256"
 	"github.com/MadBase/MadNet/crypto/bn256/cloudflare"
 
-	"github.com/MadBase/bridge/bindings"
+	"github.com/MadBase/MadNet/bridge/bindings"
 
 	"github.com/MadBase/MadNet/blockchain"
 	"github.com/MadBase/MadNet/blockchain/dkg/dkgtasks"

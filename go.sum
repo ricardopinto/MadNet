@@ -53,8 +53,6 @@ github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/DATA-DOG/go-sqlmock v1.3.3/go.mod h1:f/Ixk793poVmq4qj/V1dPUg2JEAKC73Q5eFN3EC/SaM=
-github.com/MadBase/bridge v0.9.0 h1:fE9GZcKYjD+kjd5egZJEgSMEBm3Am/+SRY7I2m9XBH0=
-github.com/MadBase/bridge v0.9.0/go.mod h1:QKjScPoutZ2RwEZMn77Hht6LmgS9du/+l+mM7/ZkQbI=
 github.com/MadBase/go-capnproto2/v2 v2.18.0-custom-schema.1 h1:YCuKcZkLlOe+EQ7SlqZ273pORzuHZR8zpGdKyee8AJg=
 github.com/MadBase/go-capnproto2/v2 v2.18.0-custom-schema.1/go.mod h1:mTxxPnU7YuHt2XP7FdWK2rsmARPIlHPMxzKmSrYwbPQ=
 github.com/OneOfOne/xxhash v1.2.2 h1:KMrpdQIwFcEqXDklaen+P1axHaj9BSKzvpUUfnHldSE=
@@ -345,6 +343,7 @@ github.com/jackpal/go-nat-pmp v1.0.2-0.20160603034137-1fa385a6f458 h1:6OvNmYgJye
 github.com/jackpal/go-nat-pmp v1.0.2-0.20160603034137-1fa385a6f458/go.mod h1:QPH045xvCAeXUZOxsnwmrtiCoxIr9eob+4orBN1SBKc=
 github.com/jedisct1/go-minisign v0.0.0-20190909160543-45766022959e/go.mod h1:G1CVv03EnqU1wYL2dFwXxW2An0az9JTl/ZsqXQeBlkU=
 github.com/jessevdk/go-flags v0.0.0-20141203071132-1679536dcc89/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
+github.com/jessevdk/go-flags v1.4.1-0.20181029123624-5de817a9aa20 h1:dAOsPLhnBzIyxu0VvmnKjlNcIlgMK+erD6VRHDtweMI=
 github.com/jessevdk/go-flags v1.4.1-0.20181029123624-5de817a9aa20/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJSGM75WSRxI=
 github.com/jmespath/go-jmespath v0.4.0/go.mod h1:T8mJZnbsbmF+m6zOOFylbeCJqk5+pHWvzYPziyZiYoo=
 github.com/jmespath/go-jmespath/internal/testify v1.5.1/go.mod h1:L3OGu8Wl2/fWfCI6z80xFu9LTZmf1ZRjMHUOPmWr69U=
