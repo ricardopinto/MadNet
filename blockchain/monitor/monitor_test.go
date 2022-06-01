@@ -4,11 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/MadBase/MadNet/blockchain/dkg/dtest"
 	"math/big"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/MadBase/MadNet/blockchain/dkg/dtest"
 
 	"github.com/MadBase/MadNet/blockchain/dkg/dkgtasks"
 

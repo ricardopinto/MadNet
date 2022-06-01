@@ -14,6 +14,7 @@ import (
 	"github.com/MadBase/MadNet/blockchain/objects"
 	"github.com/MadBase/MadNet/blockchain/tasks"
 	"github.com/MadBase/MadNet/config"
+	"github.com/MadBase/MadNet/consensus/accusation"
 	"github.com/MadBase/MadNet/consensus/db"
 	"github.com/MadBase/MadNet/consensus/objs"
 	"github.com/MadBase/MadNet/constants"
@@ -42,21 +43,22 @@ type Monitor interface {
 
 type monitor struct {
 	sync.RWMutex
-	adminHandler   interfaces.AdminHandler
-	depositHandler interfaces.DepositHandler
-	eth            interfaces.Ethereum
-	eventMap       *objects.EventMap
-	db             *db.Database
-	cdb            *db.Database
-	tickInterval   time.Duration
-	timeout        time.Duration
-	logger         *logrus.Entry
-	cancelChan     chan bool
-	statusChan     chan string
-	TypeRegistry   *objects.TypeRegistry
-	State          *objects.MonitorState
-	wg             *sync.WaitGroup
-	batchSize      uint64
+	adminHandler      interfaces.AdminHandler
+	depositHandler    interfaces.DepositHandler
+	eth               interfaces.Ethereum
+	eventMap          *objects.EventMap
+	db                *db.Database
+	cdb               *db.Database
+	tickInterval      time.Duration
+	timeout           time.Duration
+	logger            *logrus.Entry
+	cancelChan        chan bool
+	statusChan        chan string
+	TypeRegistry      *objects.TypeRegistry
+	State             *objects.MonitorState
+	wg                *sync.WaitGroup
+	batchSize         uint64
+	accusationManager *accusation.Manager
 }
 
 // NewMonitor creates a new Monitor
@@ -112,23 +114,26 @@ func NewMonitor(cdb *db.Database,
 	schedule := objects.NewSequentialSchedule(tr, adminHandler)
 	dkgState := objects.NewDkgState(eth.GetDefaultAccount())
 	State := objects.NewMonitorState(dkgState, schedule)
+	accusationManager := accusation.NewManager(adminHandler, db, logger.Logger)
+	accusationManager.Start()
 
 	return &monitor{
-		adminHandler:   adminHandler,
-		depositHandler: depositHandler,
-		eth:            eth,
-		eventMap:       eventMap,
-		cdb:            cdb,
-		db:             db,
-		TypeRegistry:   tr,
-		logger:         logger,
-		tickInterval:   tickInterval,
-		timeout:        timeout,
-		cancelChan:     make(chan bool, 1),
-		statusChan:     make(chan string, 1),
-		State:          State,
-		wg:             wg,
-		batchSize:      batchSize,
+		adminHandler:      adminHandler,
+		depositHandler:    depositHandler,
+		eth:               eth,
+		eventMap:          eventMap,
+		cdb:               cdb,
+		db:                db,
+		TypeRegistry:      tr,
+		logger:            logger,
+		tickInterval:      tickInterval,
+		timeout:           timeout,
+		cancelChan:        make(chan bool, 1),
+		statusChan:        make(chan string, 1),
+		State:             State,
+		wg:                wg,
+		batchSize:         batchSize,
+		accusationManager: accusationManager,
 	}, nil
 
 }
@@ -270,7 +275,7 @@ func (mon *monitor) eventLoop(wg *sync.WaitGroup, logger *logrus.Entry, cancelCh
 		}
 		select {
 		case <-gcTimer:
-			err := mon.db.DB().RunValueLogGC(constants.BadgerDiscardRatio) 
+			err := mon.db.DB().RunValueLogGC(constants.BadgerDiscardRatio)
 			if err != nil {
 				logger.Errorf("Failed to run value log GC: %v", err)
 			}
