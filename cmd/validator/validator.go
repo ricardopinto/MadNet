@@ -19,6 +19,7 @@ import (
 	"github.com/MadBase/MadNet/cmd/utils"
 	"github.com/MadBase/MadNet/config"
 	"github.com/MadBase/MadNet/consensus"
+	"github.com/MadBase/MadNet/consensus/accusation"
 	"github.com/MadBase/MadNet/consensus/admin"
 	"github.com/MadBase/MadNet/consensus/db"
 	"github.com/MadBase/MadNet/consensus/dman"
@@ -323,6 +324,9 @@ func validatorNode(cmd *cobra.Command, args []string) {
 	localStateHandler.Init(consDB, app, consGossipHandlers, publicKey, consSync.Safe, storage)
 	statusLogger.Init(consLSEngine, peerManager, consAdminHandlers, mon)
 
+	// setup Accusation Manager
+	accusationManager := accusation.NewManager(consAdminHandlers, consDB, logging.GetLogger("accusations"))
+
 	//////////////////////////////////////////////////////////////////////////////
 	//LAUNCH ALL SERVICE GOROUTINES///////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
@@ -346,7 +350,7 @@ func validatorNode(cmd *cobra.Command, args []string) {
 	go peerManager.Start()
 	defer peerManager.Close()
 
-	go consGossipClient.Start()//nolint:errcheck
+	go consGossipClient.Start() //nolint:errcheck
 	defer consGossipClient.Close()
 
 	go consDlManager.Start()
@@ -360,6 +364,9 @@ func validatorNode(cmd *cobra.Command, args []string) {
 
 	go consGossipHandlers.Start()
 	defer consGossipHandlers.Close()
+
+	go accusationManager.Start()
+	defer accusationManager.Stop()
 
 	//////////////////////////////////////////////////////////////////////////////
 	//SETUP SHUTDOWN MONITORING///////////////////////////////////////////////////
