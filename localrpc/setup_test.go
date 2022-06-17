@@ -113,8 +113,8 @@ func TestMain(m *testing.M) {
 			panic(err)
 		}
 	}()
-	defer func (){ 
-		err := lrpc.Close() 
+	defer func() {
+		err := lrpc.Close()
 		if err != nil {
 			panic(err)
 		}
@@ -280,7 +280,7 @@ func validatorNode() {
 		mDB = rawMonitorDb
 	}
 
-	consSync.Init(consDB, mDB, tDB, consGossipClient, consGossipHandlers, consTxPool, consLSEngine, app, consAdminHandlers, peerManager, storage)
+	consSync.Init(consDB, mDB, tDB, consGossipClient, consGossipHandlers, consTxPool, consLSEngine, app, consAdminHandlers, peerManager, nil, storage)
 	localStateHandler.Init(consDB, app, consGossipHandlers, publicKey, consSync.Safe, storage)
 	statusLogger.Init(consLSEngine, peerManager, consAdminHandlers, nil)
 
