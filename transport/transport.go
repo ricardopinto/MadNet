@@ -4,12 +4,12 @@ import (
 	"net"
 	"sync"
 
-	"github.com/MadBase/MadNet/config"
-	"github.com/MadBase/MadNet/crypto/secp256k1"
-	"github.com/MadBase/MadNet/interfaces"
-	"github.com/MadBase/MadNet/transport/brontide"
-	"github.com/MadBase/MadNet/types"
-	"github.com/MadBase/MadNet/utils"
+	"github.com/alicenet/alicenet/config"
+	"github.com/alicenet/alicenet/crypto/secp256k1"
+	"github.com/alicenet/alicenet/interfaces"
+	"github.com/alicenet/alicenet/transport/brontide"
+	"github.com/alicenet/alicenet/types"
+	"github.com/alicenet/alicenet/utils"
 	"github.com/sirupsen/logrus"
 )
 
@@ -26,9 +26,6 @@ const (
 type P2PTransport struct {
 	// This is the logger for the transport
 	logger *logrus.Logger
-	// protoVersion specifies the protocol version of the local node
-	// this is not used at this time
-	protoVersion types.ProtoVersion
 	// This stores the listener address of the local node.
 	localNodeAddr interfaces.NodeAddr
 	// This is the private key used during encryption and authentication.
@@ -39,8 +36,6 @@ type P2PTransport struct {
 	closeChan chan struct{}
 	// this is the sync once used to protect the close methods
 	closeOnce sync.Once
-	// channel connections hold for acceptance
-	connSuccessChan chan *P2PConn
 }
 
 // Close will close all loops in this object and any

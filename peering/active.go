@@ -3,7 +3,7 @@ package peering
 import (
 	"sync"
 
-	"github.com/MadBase/MadNet/interfaces"
+	"github.com/alicenet/alicenet/interfaces"
 )
 
 // activePeerStore stores active peers
@@ -84,6 +84,7 @@ func (ps *activePeerStore) del(c interfaces.NodeAddr) {
 		delete(ps.pid, c.Identity())
 	}
 }
+
 //nolint:unused,deadcode
 func (ps *activePeerStore) get(c interfaces.NodeAddr) (interfaces.P2PClient, bool) {
 	ps.RLock()

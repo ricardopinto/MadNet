@@ -6,11 +6,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MadBase/MadNet/consensus/objs"
-	"github.com/MadBase/MadNet/errorz"
-	"github.com/MadBase/MadNet/interfaces"
-	"github.com/MadBase/MadNet/middleware"
-	"github.com/MadBase/MadNet/utils"
+	"github.com/alicenet/alicenet/consensus/objs"
+	"github.com/alicenet/alicenet/errorz"
+	"github.com/alicenet/alicenet/interfaces"
+	"github.com/alicenet/alicenet/middleware"
+	"github.com/alicenet/alicenet/utils"
 	"github.com/dgraph-io/badger/v2"
 	grpc_retry "github.com/grpc-ecosystem/go-grpc-middleware/retry"
 	"github.com/sirupsen/logrus"
@@ -22,9 +22,9 @@ const retryMax = 6      // equates to approx 4 seconds
 
 // RootActor spawns top level actor types for download manager.
 // This system allows the synchronously run consensus algorithm to request the
-// download of tx data and blocks from remote peers as a background task.
+// download of tx state and blocks from remote peers as a background task.
 // The system keeps a record of all pending downloads to prevent double entry
-// and stores all data requested into a hot cache that is flushed to disk
+// and stores all state requested into a hot cache that is flushed to disk
 // by the synchronous code. This system will retry failed requests until
 // the height lag is raised to a point that invalidates the given
 // request.

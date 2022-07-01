@@ -1,3 +1,5 @@
+//go:build integration
+
 package blockchain_test
 
 import (
@@ -6,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MadBase/MadNet/blockchain/dkg/dtest"
+	"github.com/alicenet/alicenet/blockchain/dkg/dtest"
 	"github.com/stretchr/testify/assert"
 )
 

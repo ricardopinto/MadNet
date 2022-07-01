@@ -6,14 +6,14 @@ import (
 	"encoding/gob"
 	"sync"
 
-	"github.com/MadBase/MadNet/constants/dbprefix"
+	"github.com/alicenet/alicenet/constants/dbprefix"
 	"github.com/google/uuid"
 
-	trie "github.com/MadBase/MadNet/badgerTrie"
-	"github.com/MadBase/MadNet/consensus/objs"
-	"github.com/MadBase/MadNet/constants"
-	"github.com/MadBase/MadNet/logging"
-	"github.com/MadBase/MadNet/utils"
+	trie "github.com/alicenet/alicenet/badgerTrie"
+	"github.com/alicenet/alicenet/consensus/objs"
+	"github.com/alicenet/alicenet/constants"
+	"github.com/alicenet/alicenet/logging"
+	"github.com/alicenet/alicenet/utils"
 	"github.com/dgraph-io/badger/v2"
 	"github.com/sirupsen/logrus"
 )
@@ -1079,7 +1079,7 @@ func (db *Database) GetLastSnapshot(txn *badger.Txn) (*objs.BlockHeader, error) 
 	return result, nil
 }
 
-// Gets the latest snapshot starting from the Madnet 'height'
+// Gets the latest snapshot starting from the AliceNet 'height'
 func (db *Database) GetSnapshotByHeight(txn *badger.Txn, height uint32) (*objs.BlockHeader, error) {
 	prefix := db.makeSnapshotBlockHeaderIterKey()
 	seek := []byte{}

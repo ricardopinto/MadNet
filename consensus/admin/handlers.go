@@ -7,16 +7,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MadBase/MadNet/consensus/db"
-	"github.com/MadBase/MadNet/consensus/objs"
-	"github.com/MadBase/MadNet/constants"
-	"github.com/MadBase/MadNet/crypto"
-	"github.com/MadBase/MadNet/dynamics"
-	"github.com/MadBase/MadNet/errorz"
-	"github.com/MadBase/MadNet/interfaces"
-	"github.com/MadBase/MadNet/ipc"
-	"github.com/MadBase/MadNet/logging"
-	"github.com/MadBase/MadNet/utils"
+	"github.com/alicenet/alicenet/consensus/db"
+	"github.com/alicenet/alicenet/consensus/objs"
+	"github.com/alicenet/alicenet/constants"
+	"github.com/alicenet/alicenet/crypto"
+	"github.com/alicenet/alicenet/dynamics"
+	"github.com/alicenet/alicenet/errorz"
+	"github.com/alicenet/alicenet/interfaces"
+	"github.com/alicenet/alicenet/logging"
+	"github.com/alicenet/alicenet/utils"
 	"github.com/dgraph-io/badger/v2"
 	"github.com/sirupsen/logrus"
 )
@@ -45,11 +44,10 @@ type Handlers struct {
 	appHandler  interfaces.Application
 	storage     dynamics.StorageGetter
 	ReceiveLock chan interfaces.Lockable
-	ipcServer   *ipc.Server
 }
 
 // Init creates all fields and binds external services
-func (ah *Handlers) Init(chainID uint32, database *db.Database, secret []byte, appHandler interfaces.Application, ethPubk []byte, storage dynamics.StorageGetter, ipcs *ipc.Server) {
+func (ah *Handlers) Init(chainID uint32, database *db.Database, secret []byte, appHandler interfaces.Application, ethPubk []byte, storage dynamics.StorageGetter) {
 	ctx := context.Background()
 	subCtx, cancelFunc := context.WithCancel(ctx)
 	ah.ctx = subCtx
@@ -63,7 +61,6 @@ func (ah *Handlers) Init(chainID uint32, database *db.Database, secret []byte, a
 	ah.ethAcct = crypto.GetAccount(ethPubk)
 	ah.ReceiveLock = make(chan interfaces.Lockable)
 	ah.storage = storage
-	ah.ipcServer = ipcs
 }
 
 // Close shuts down all workers
@@ -94,7 +91,7 @@ func (ah *Handlers) AddValidatorSet(v *objs.ValidatorSet) error {
 	defer mutex.Unlock()
 	return ah.database.Update(func(txn *badger.Txn) error {
 		// Checking if we can exit earlier (mainly when reconstructing the chain
-		// from ethereum data)
+		// from ethereum state)
 		{
 			height := uint32(1)
 			if v.NotBefore >= 1 {

@@ -11,32 +11,31 @@ import (
 
 	_ "net/http/pprof"
 
-	"github.com/MadBase/MadNet/application"
-	"github.com/MadBase/MadNet/application/deposit"
-	"github.com/MadBase/MadNet/blockchain"
-	"github.com/MadBase/MadNet/blockchain/interfaces"
-	"github.com/MadBase/MadNet/blockchain/monitor"
-	"github.com/MadBase/MadNet/cmd/utils"
-	"github.com/MadBase/MadNet/config"
-	"github.com/MadBase/MadNet/consensus"
-	"github.com/MadBase/MadNet/consensus/accusation"
-	"github.com/MadBase/MadNet/consensus/admin"
-	"github.com/MadBase/MadNet/consensus/db"
-	"github.com/MadBase/MadNet/consensus/dman"
-	"github.com/MadBase/MadNet/consensus/evidence"
-	"github.com/MadBase/MadNet/consensus/gossip"
-	"github.com/MadBase/MadNet/consensus/lstate"
-	"github.com/MadBase/MadNet/consensus/request"
-	"github.com/MadBase/MadNet/constants"
-	mncrypto "github.com/MadBase/MadNet/crypto"
-	"github.com/MadBase/MadNet/dynamics"
-	"github.com/MadBase/MadNet/ipc"
-	"github.com/MadBase/MadNet/localrpc"
-	"github.com/MadBase/MadNet/logging"
-	"github.com/MadBase/MadNet/peering"
-	"github.com/MadBase/MadNet/proto"
-	"github.com/MadBase/MadNet/status"
-	mnutils "github.com/MadBase/MadNet/utils"
+	"github.com/alicenet/alicenet/application"
+	"github.com/alicenet/alicenet/application/deposit"
+	"github.com/alicenet/alicenet/blockchain"
+	"github.com/alicenet/alicenet/blockchain/interfaces"
+	"github.com/alicenet/alicenet/blockchain/monitor"
+	"github.com/alicenet/alicenet/cmd/utils"
+	"github.com/alicenet/alicenet/config"
+	"github.com/alicenet/alicenet/consensus"
+	"github.com/alicenet/alicenet/consensus/accusation"
+	"github.com/alicenet/alicenet/consensus/admin"
+	"github.com/alicenet/alicenet/consensus/db"
+	"github.com/alicenet/alicenet/consensus/dman"
+	"github.com/alicenet/alicenet/consensus/evidence"
+	"github.com/alicenet/alicenet/consensus/gossip"
+	"github.com/alicenet/alicenet/consensus/lstate"
+	"github.com/alicenet/alicenet/consensus/request"
+	"github.com/alicenet/alicenet/constants"
+	mncrypto "github.com/alicenet/alicenet/crypto"
+	"github.com/alicenet/alicenet/dynamics"
+	"github.com/alicenet/alicenet/localrpc"
+	"github.com/alicenet/alicenet/logging"
+	"github.com/alicenet/alicenet/peering"
+	"github.com/alicenet/alicenet/proto"
+	"github.com/alicenet/alicenet/status"
+	mnutils "github.com/alicenet/alicenet/utils"
 	"github.com/dgraph-io/badger/v2"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
@@ -48,7 +47,7 @@ import (
 var Command = cobra.Command{
 	Use:   "validator",
 	Short: "Starts a node",
-	Long:  "Runs a MadNet node in mining or non-mining mode",
+	Long:  "Runs a AliceNet node in mining or non-mining mode",
 	Run:   validatorNode}
 
 func initEthereumConnection(logger *logrus.Logger) (interfaces.Ethereum, *keystore.Key, []byte) {
@@ -230,7 +229,7 @@ func validatorNode(cmd *cobra.Command, args []string) {
 	consDB := &db.Database{}
 	monDB := &db.Database{}
 
-	// app maintains the UTXO set of the MadNet blockchain (module is separate from consensus e.d.)
+	// app maintains the UTXO set of the AliceNet blockchain (module is separate from consensus e.d.)
 	app := &application.Application{}
 	appDepositHandler := &deposit.Handler{} // watches ETH blockchain about deposits
 
@@ -240,9 +239,6 @@ func validatorNode(cmd *cobra.Command, args []string) {
 	// gossip system (e.g. I gossip the block header, I request the transactions, to drive what the next request should be)
 	consGossipHandlers := &gossip.Handlers{}
 	consGossipClient := &gossip.Client{}
-
-	// consTxPool takes old state from consensusDB, used as evidence for what was done (new blocks, consensus, voting)
-	consTxPool := &evidence.Pool{}
 
 	// link between ETH net and our internal logic, relays important ETH events (e.g. snapshot) into our system
 	consAdminHandlers := &admin.Handlers{}
@@ -269,15 +265,15 @@ func validatorNode(cmd *cobra.Command, args []string) {
 
 	peerManager := initPeerManager(consGossipHandlers, consReqHandler)
 
-	ipcServer := ipc.NewServer(config.Configuration.Firewalld.SocketFile)
-
 	// Initialize the consensus engine signer
 	if err := secp256k1Signer.SetPrivk(crypto.FromECDSA(keys.PrivateKey)); err != nil {
 		panic(err)
 	}
 
 	consDB.Init(rawConsensusDb)
-	consTxPool.Init(consDB)
+
+	// consTxPool takes old state from consensusDB, used as evidence for what was done (new blocks, consensus, voting)
+	consTxPool := evidence.NewPool(consDB)
 
 	appDepositHandler.Init()
 	if err := app.Init(consDB, rawTxPoolDb, appDepositHandler, storage); err != nil {
@@ -299,7 +295,7 @@ func validatorNode(cmd *cobra.Command, args []string) {
 	consLSHandler.Init(consDB, consDlManager)
 	consGossipHandlers.Init(chainID, consDB, peerManager.P2PClient(), app, consLSHandler, storage)
 	consGossipClient.Init(consDB, peerManager.P2PClient(), app, storage)
-	consAdminHandlers.Init(chainID, consDB, mncrypto.Hasher([]byte(config.Configuration.Validator.SymmetricKey)), app, publicKey, storage, ipcServer)
+	consAdminHandlers.Init(chainID, consDB, mncrypto.Hasher([]byte(config.Configuration.Validator.SymmetricKey)), app, publicKey, storage)
 	consLSEngine.Init(consDB, consDlManager, app, secp256k1Signer, consAdminHandlers, publicKey, consReqClient, storage)
 
 	// Setup monitor
@@ -345,9 +341,6 @@ func validatorNode(cmd *cobra.Command, args []string) {
 		panic(err)
 	}
 	defer mon.Close()
-
-	go ipcServer.Start() //nolint:errcheck
-	defer ipcServer.Close()
 
 	go peerManager.Start()
 	defer peerManager.Close()

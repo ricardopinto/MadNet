@@ -4,13 +4,13 @@ import (
 	"context"
 	"sync"
 
-	"github.com/MadBase/MadNet/constants"
-	"github.com/MadBase/MadNet/dynamics"
+	"github.com/alicenet/alicenet/constants"
+	"github.com/alicenet/alicenet/dynamics"
 
-	"github.com/MadBase/MadNet/consensus/db"
-	"github.com/MadBase/MadNet/interfaces"
-	"github.com/MadBase/MadNet/logging"
-	pb "github.com/MadBase/MadNet/proto"
+	"github.com/alicenet/alicenet/consensus/db"
+	"github.com/alicenet/alicenet/interfaces"
+	"github.com/alicenet/alicenet/logging"
+	pb "github.com/alicenet/alicenet/proto"
 	"github.com/dgraph-io/badger/v2"
 	"github.com/sirupsen/logrus"
 )
@@ -29,7 +29,7 @@ type appHandler interface {
 }
 
 // Handler serves incoming requests and handles routing of outgoing
-// requests for data from the consensus system.
+// requests for state from the consensus system.
 type Handler struct {
 	wg        sync.WaitGroup
 	ctx       context.Context
@@ -252,7 +252,7 @@ func (rb *Handler) HandleP2PGetSnapShotHdrNode(ctx context.Context, r *pb.GetSna
 	return resp, nil
 }
 
-// HandleP2PGetSnapShotStateData serves UTXOs based on State Trie hash data
+// HandleP2PGetSnapShotStateData serves UTXOs based on State Trie hash state
 func (rb *Handler) HandleP2PGetSnapShotStateData(ctx context.Context, r *pb.GetSnapShotStateDataRequest) (*pb.GetSnapShotStateDataResponse, error) {
 	select {
 	case <-ctx.Done():

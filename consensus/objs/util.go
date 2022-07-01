@@ -5,11 +5,11 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	trie "github.com/MadBase/MadNet/badgerTrie"
-	"github.com/MadBase/MadNet/constants"
-	"github.com/MadBase/MadNet/crypto"
-	"github.com/MadBase/MadNet/errorz"
-	"github.com/MadBase/MadNet/utils"
+	trie "github.com/alicenet/alicenet/badgerTrie"
+	"github.com/alicenet/alicenet/constants"
+	"github.com/alicenet/alicenet/crypto"
+	"github.com/alicenet/alicenet/errorz"
+	"github.com/alicenet/alicenet/utils"
 )
 
 // ExtractHR extracts the Height and Round from an interface;
@@ -309,7 +309,7 @@ func GetProposerIdx(numv int, height uint32, round uint32) uint8 {
 	return uint8(int(height+round-1) % numv)
 }
 
-// SplitBlob separates a blob of fixed size data types into a slice of slices
+// SplitBlob separates a blob of fixed size state types into a slice of slices
 func SplitBlob(s []byte, blen int) ([][]byte, error) {
 	if blen <= 0 {
 		return [][]byte{}, errorz.ErrInvalid{}.New("SplitBlob; blen <= 0")
@@ -325,14 +325,14 @@ func SplitBlob(s []byte, blen int) ([][]byte, error) {
 	return buf, nil
 }
 
-// SplitSignatures splits signatures by chopping up a blob of data into byte slices by length.
+// SplitSignatures splits signatures by chopping up a blob of state into byte slices by length.
 // return an error if the length is not correct. IE the total length
 // is not a multiple of expected length for a single element of type.
 func SplitSignatures(s []byte) ([][]byte, error) {
 	return SplitBlob(s, constants.CurveSecp256k1SigLen)
 }
 
-// SplitHashes splits hashes by chopping up a blob of data into byte slices by length.
+// SplitHashes splits hashes by chopping up a blob of state into byte slices by length.
 // return an error if the length is not correct. IE the total length
 // is not a multiple of expected length for a single element of type.
 func SplitHashes(s []byte) ([][]byte, error) {

@@ -1,11 +1,14 @@
+//go:build integration
+
 package dkgtasks_test
 
 import (
 	"context"
-	"github.com/MadBase/MadNet/blockchain/objects"
-	"github.com/MadBase/MadNet/logging"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/alicenet/alicenet/blockchain/objects"
+	"github.com/alicenet/alicenet/logging"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDisputeMissingKeySharesTask_FourUnsubmittedKeyShare_DoWork_Success(t *testing.T) {

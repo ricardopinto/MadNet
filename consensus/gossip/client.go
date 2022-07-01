@@ -5,25 +5,21 @@ import (
 	"sync"
 	"time"
 
-	"github.com/MadBase/MadNet/consensus/db"
-	"github.com/MadBase/MadNet/consensus/lstate"
-	"github.com/MadBase/MadNet/consensus/objs"
-	"github.com/MadBase/MadNet/constants"
-	"github.com/MadBase/MadNet/dynamics"
-	"github.com/MadBase/MadNet/interfaces"
-	"github.com/MadBase/MadNet/logging"
-	"github.com/MadBase/MadNet/middleware"
-	pb "github.com/MadBase/MadNet/proto"
-	"github.com/MadBase/MadNet/utils"
+	"github.com/alicenet/alicenet/consensus/db"
+	"github.com/alicenet/alicenet/consensus/lstate"
+	"github.com/alicenet/alicenet/consensus/objs"
+	"github.com/alicenet/alicenet/constants"
+	"github.com/alicenet/alicenet/dynamics"
+	"github.com/alicenet/alicenet/interfaces"
+	"github.com/alicenet/alicenet/logging"
+	"github.com/alicenet/alicenet/middleware"
+	pb "github.com/alicenet/alicenet/proto"
+	"github.com/alicenet/alicenet/utils"
 
 	"github.com/dgraph-io/badger/v2"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
-
-const maxRetryCount = 12
-const backOffAmount = 1
-const backOffJitter = float64(.1)
 
 type appClient interface {
 	GetTxsForGossip(txnState *badger.Txn, currentHeight uint32) ([]interfaces.Transaction, error)

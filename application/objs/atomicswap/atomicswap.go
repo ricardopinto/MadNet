@@ -1,10 +1,10 @@
 package atomicswap
 
 import (
-	mdefs "github.com/MadBase/MadNet/application/objs/capn"
-	// "github.com/MadBase/MadNet/constants"
-	"github.com/MadBase/MadNet/errorz"
-	// "github.com/MadBase/MadNet/utils"
+	mdefs "github.com/alicenet/alicenet/application/objs/capn"
+	// "github.com/alicenet/alicenet/constants"
+	"github.com/alicenet/alicenet/errorz"
+	// "github.com/alicenet/alicenet/utils"
 	// capnp "github.com/MadBase/go-capnproto2/v2"
 )
 
@@ -43,7 +43,7 @@ func Unmarshal(data []byte) (mdefs.AtomicSwap, error) {
 		return mdefs.AtomicSwap{}, err
 	}
 	return obj, nil
-		*/
+	*/
 }
 
 // Validate will validate the AtomicSwap object
@@ -60,5 +60,5 @@ func Validate(v mdefs.AtomicSwap) error {
 		return errorz.ErrInvalid{}.New("atomicswap capn obj is not valid: invalid TxHash; incorrect byte length")
 	}
 	return nil
-		*/
+	*/
 }

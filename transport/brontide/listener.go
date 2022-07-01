@@ -10,11 +10,11 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/MadBase/MadNet/constants"
-	"github.com/MadBase/MadNet/crypto/secp256k1"
-	"github.com/MadBase/MadNet/logging"
-	"github.com/MadBase/MadNet/types"
-	"github.com/MadBase/MadNet/utils"
+	"github.com/alicenet/alicenet/constants"
+	"github.com/alicenet/alicenet/crypto/secp256k1"
+	"github.com/alicenet/alicenet/logging"
+	"github.com/alicenet/alicenet/types"
+	"github.com/alicenet/alicenet/utils"
 )
 
 // ErrReject is an error raised if a connection is rejected
@@ -62,7 +62,7 @@ type Listener struct {
 }
 
 // NewListener returns a new net.Listener which enforces the Brontide scheme
-// during both initial connection establishment and data transfer.
+// during both initial connection establishment and state transfer.
 func NewListener(localStatic *secp256k1.PrivateKey, host string, port int, protoVersion types.ProtoVersion, chainID types.ChainIdentifier, totalLimit int, pubkeyLimit int, originLimit int) (*Listener, error) {
 	listenAddr := net.JoinHostPort(host, strconv.Itoa(port))
 

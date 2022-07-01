@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"io"
 	"net"
-	"os"
+	"path"
 	"sync"
 	"testing"
 
-	"github.com/MadBase/MadNet/cmd/firewalld/lib"
-	"github.com/MadBase/MadNet/cmd/firewalld/mock"
-	"github.com/MadBase/MadNet/test/testutils"
+	"github.com/alicenet/alicenet/cmd/firewalld/lib"
+	"github.com/alicenet/alicenet/cmd/firewalld/mock"
+	"github.com/alicenet/alicenet/test/testutils"
 	"github.com/sirupsen/logrus/hooks/test"
 )
 
@@ -80,8 +80,8 @@ func newTestServer(address string) (getMsg func() []mock.Msg, write func([]byte)
 }
 
 func TestSocket(t *testing.T) {
-	socketFile := testutils.SocketFileName()
-	defer os.Remove(socketFile)
+	dir := t.TempDir()
+	socketFile := path.Join(dir, "socket")
 	getMsgs, write, end := newTestServer(socketFile)
 	im := mock.NewImplementation()
 

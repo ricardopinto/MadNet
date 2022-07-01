@@ -9,11 +9,11 @@ import (
 	"sync"
 	"time"
 
-	aobjs "github.com/MadBase/MadNet/application/objs"
-	"github.com/MadBase/MadNet/application/objs/uint256"
-	"github.com/MadBase/MadNet/consensus/objs"
-	"github.com/MadBase/MadNet/constants"
-	pb "github.com/MadBase/MadNet/proto"
+	aobjs "github.com/alicenet/alicenet/application/objs"
+	"github.com/alicenet/alicenet/application/objs/uint256"
+	"github.com/alicenet/alicenet/consensus/objs"
+	"github.com/alicenet/alicenet/constants"
+	pb "github.com/alicenet/alicenet/proto"
 	"google.golang.org/grpc"
 )
 
@@ -309,7 +309,7 @@ func (lrpc *Client) GetPendingTransaction(ctx context.Context, txHash []byte) (*
 	return tx, nil
 }
 
-// GetData returns only the data stored in a datastore
+// GetData returns only the state stored in a datastore
 func (lrpc *Client) GetData(ctx context.Context, curveSpec constants.CurveSpec, account []byte, index []byte) ([]byte, error) {
 	if err := lrpc.entrancyGuard(); err != nil {
 		return nil, err

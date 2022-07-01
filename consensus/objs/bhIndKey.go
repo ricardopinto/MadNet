@@ -1,9 +1,9 @@
 package objs
 
 import (
-	"github.com/MadBase/MadNet/constants"
-	"github.com/MadBase/MadNet/errorz"
-	"github.com/MadBase/MadNet/utils"
+	"github.com/alicenet/alicenet/constants"
+	"github.com/alicenet/alicenet/errorz"
+	"github.com/alicenet/alicenet/utils"
 )
 
 // BlockHeaderHashIndexKey ...
@@ -19,7 +19,7 @@ func (b *BlockHeaderHashIndexKey) UnmarshalBinary(data []byte) error {
 		return errorz.ErrInvalid{}.New("BlockHeaderHashIndexKey.UnmarshalBinary; bhhik not initialized")
 	}
 	if len(data) != (constants.HashLen + 2) {
-		return errorz.ErrInvalid{}.New("BlockHeaderHashIndexKey.UnmarshalBinary; incorrect data length")
+		return errorz.ErrInvalid{}.New("BlockHeaderHashIndexKey.UnmarshalBinary; incorrect state length")
 	}
 	b.Prefix = utils.CopySlice(data[0:2])
 	b.BlockHash = utils.CopySlice(data[2:])

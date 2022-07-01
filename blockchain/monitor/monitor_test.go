@@ -1,32 +1,34 @@
+//go:build integration
+
 package monitor_test
 
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"math/big"
 	"sync"
 	"testing"
 	"time"
 
-	"github.com/MadBase/MadNet/blockchain/dkg/dtest"
+	"github.com/alicenet/alicenet/blockchain/dkg/dtest"
 
-	"github.com/MadBase/MadNet/blockchain/dkg/dkgtasks"
+	"github.com/alicenet/alicenet/blockchain/dkg/dkgtasks"
 
-	aobjs "github.com/MadBase/MadNet/application/objs"
-	"github.com/MadBase/MadNet/blockchain/interfaces"
-	"github.com/MadBase/MadNet/blockchain/monitor"
-	"github.com/MadBase/MadNet/blockchain/objects"
-	"github.com/MadBase/MadNet/blockchain/tasks"
-	"github.com/MadBase/MadNet/consensus/db"
-	"github.com/MadBase/MadNet/logging"
-	"github.com/MadBase/MadNet/test/mocks"
+	aobjs "github.com/alicenet/alicenet/application/objs"
+	"github.com/alicenet/alicenet/blockchain/interfaces"
+	"github.com/alicenet/alicenet/blockchain/monitor"
+	"github.com/alicenet/alicenet/blockchain/objects"
+	"github.com/alicenet/alicenet/blockchain/tasks"
+	"github.com/alicenet/alicenet/consensus/db"
+	"github.com/alicenet/alicenet/logging"
+	"github.com/alicenet/alicenet/test/mocks"
 
-	"github.com/MadBase/MadNet/utils"
+	"github.com/alicenet/alicenet/utils"
 	"github.com/dgraph-io/badger/v2"
 	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
 	"github.com/stretchr/testify/assert"
@@ -73,9 +75,9 @@ func populateMonitor(state *objects.MonitorState, addr0 common.Address, EPOCH ui
 	state.EthDKG.Participants[addr0].Commitments[0][1] = big.NewInt(2)
 
 	state.ValidatorSets[EPOCH] = objects.ValidatorSet{
-		ValidatorCount:        4,
-		NotBeforeMadNetHeight: 321,
-		GroupKey:              [4]*big.Int{big.NewInt(3), big.NewInt(2), big.NewInt(1), big.NewInt(5)}}
+		ValidatorCount:          4,
+		NotBeforeAliceNetHeight: 321,
+		GroupKey:                [4]*big.Int{big.NewInt(3), big.NewInt(2), big.NewInt(1), big.NewInt(5)}}
 
 	state.Validators[EPOCH] = []objects.Validator{
 		createValidator("0x546F99F244b7B58B855330AE0E2BC1b30b41302F", 1),
@@ -260,13 +262,8 @@ func TestWrapDoNotContinue(t *testing.T) {
 	genErr := objects.ErrCanNotContinue
 	specErr := errors.New("neutrinos")
 
-	niceErr := errors.Wrapf(genErr, "Caused by %v", specErr)
+	niceErr := fmt.Errorf("%w because %v", genErr, specErr)
 	assert.True(t, errors.Is(niceErr, genErr))
 
-	t.Logf("NiceErr: %v", niceErr)
-
-	nice2Err := fmt.Errorf("%w because %v", genErr, specErr)
-	assert.True(t, errors.Is(nice2Err, genErr))
-
-	t.Logf("Nice2Err: %v", nice2Err)
+	t.Logf("%v", niceErr)
 }

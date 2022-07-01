@@ -5,12 +5,12 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/MadBase/MadNet/blockchain/dkg/dkgtasks"
-	"github.com/MadBase/MadNet/blockchain/interfaces"
-	"github.com/MadBase/MadNet/blockchain/objects"
-	"github.com/MadBase/MadNet/consensus/admin"
+	"github.com/alicenet/alicenet/blockchain/dkg/dkgtasks"
+	"github.com/alicenet/alicenet/blockchain/interfaces"
+	"github.com/alicenet/alicenet/blockchain/objects"
+	"github.com/alicenet/alicenet/consensus/admin"
 	"github.com/ethereum/go-ethereum/accounts"
-	"github.com/pborman/uuid"
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 )
@@ -176,7 +176,7 @@ func TestScheduler_FailRemove(t *testing.T) {
 	assert.Equal(t, 1, s.Length())
 
 	// Make up a random id
-	taskID := uuid.NewRandom()
+	taskID := uuid.New()
 	err := s.Remove(taskID)
 	assert.Equal(t, objects.ErrNotScheduled, err)
 
@@ -212,7 +212,7 @@ func TestScheduler_FailRetrieve(t *testing.T) {
 	// Schedule something
 	s.Schedule(5, 15, task)
 
-	_, err := s.Retrieve(uuid.NewRandom())
+	_, err := s.Retrieve(uuid.New())
 	assert.Equal(t, objects.ErrNotScheduled, err)
 }
 

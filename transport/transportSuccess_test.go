@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/MadBase/MadNet/interfaces"
-	"github.com/MadBase/MadNet/types"
+	"github.com/alicenet/alicenet/interfaces"
+	"github.com/alicenet/alicenet/types"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 )
@@ -57,7 +57,7 @@ func TestTransportsuccess(t *testing.T) {
 	complete3 := make(chan struct{})
 
 	go dialer(t, transport2, nodeAddr1, complete1) //nolint:govet,staticcheck
-	go acceptWithResp(t, transport1, complete2)//nolint:govet,staticcheck
+	go acceptWithResp(t, transport1, complete2)    //nolint:govet,staticcheck
 	go accept(t, transport2, complete3)
 
 	<-complete1

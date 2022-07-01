@@ -5,20 +5,19 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
-	"github.com/MadBase/MadNet/consensus/admin"
-	"github.com/MadBase/MadNet/consensus/db"
-	"github.com/MadBase/MadNet/consensus/dman"
-	"github.com/MadBase/MadNet/consensus/objs"
-	"github.com/MadBase/MadNet/consensus/request"
-	"github.com/MadBase/MadNet/constants"
-	"github.com/MadBase/MadNet/crypto"
-	"github.com/MadBase/MadNet/dynamics"
-	"github.com/MadBase/MadNet/errorz"
-	"github.com/MadBase/MadNet/interfaces"
-	"github.com/MadBase/MadNet/logging"
-	"github.com/MadBase/MadNet/utils"
+	"github.com/alicenet/alicenet/consensus/admin"
+	"github.com/alicenet/alicenet/consensus/db"
+	"github.com/alicenet/alicenet/consensus/dman"
+	"github.com/alicenet/alicenet/consensus/objs"
+	"github.com/alicenet/alicenet/consensus/request"
+	"github.com/alicenet/alicenet/constants"
+	"github.com/alicenet/alicenet/crypto"
+	"github.com/alicenet/alicenet/dynamics"
+	"github.com/alicenet/alicenet/errorz"
+	"github.com/alicenet/alicenet/interfaces"
+	"github.com/alicenet/alicenet/logging"
+	"github.com/alicenet/alicenet/utils"
 	"github.com/dgraph-io/badger/v2"
 	"github.com/sirupsen/logrus"
 )
@@ -47,8 +46,7 @@ type Engine struct {
 
 	storage dynamics.StorageGetter
 
-	dm           *dman.DMan
-	notSafeTimer time.Time
+	dm *dman.DMan
 }
 
 // Init will initialize the Consensus Engine and all sub modules
@@ -129,8 +127,7 @@ func (ce *Engine) UpdateLocalState() (bool, error) {
 				utils.DebugTrace(ce.logger, nil, "Waiting snapshot completion")
 				updateLocalState = false
 			} else {
-				// if it's safe to proceed, we update ownState with the latest
-				// data
+				// if it's safe to proceed, we update ownState with the latest state
 				ownState, err := ce.database.GetOwnState(txn)
 				if err != nil {
 					return err

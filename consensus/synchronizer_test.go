@@ -6,14 +6,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MadBase/MadNet/application/objs"
-	"github.com/MadBase/MadNet/config"
-	"github.com/MadBase/MadNet/consensus/admin"
-	"github.com/MadBase/MadNet/consensus/db"
-	"github.com/MadBase/MadNet/consensus/gossip"
-	"github.com/MadBase/MadNet/constants"
-	mncrypto "github.com/MadBase/MadNet/crypto"
-	"github.com/MadBase/MadNet/utils"
+	"github.com/alicenet/alicenet/application/objs"
+	"github.com/alicenet/alicenet/config"
+	"github.com/alicenet/alicenet/consensus/admin"
+	"github.com/alicenet/alicenet/consensus/db"
+	"github.com/alicenet/alicenet/consensus/gossip"
+	"github.com/alicenet/alicenet/constants"
+	mncrypto "github.com/alicenet/alicenet/crypto"
+	"github.com/alicenet/alicenet/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -42,7 +42,7 @@ func TestSynchronizer_InitAndStart(t *testing.T) {
 	assert.Nil(t, err)
 
 	consAdminHandlers := &admin.Handlers{}
-	consAdminHandlers.Init(1, database, mncrypto.Hasher([]byte(config.Configuration.Validator.SymmetricKey)), nil, make([]byte, constants.HashLen), objs.MakeMockStorageGetter(), nil)
+	consAdminHandlers.Init(1, database, mncrypto.Hasher([]byte(config.Configuration.Validator.SymmetricKey)), nil, make([]byte, constants.HashLen), objs.MakeMockStorageGetter())
 
 	sync := &Synchronizer{}
 	sync.Init(nil, nil, tdb, nil, &gossip.Handlers{}, nil, nil, nil, consAdminHandlers, nil, nil, objs.MakeMockStorageGetter())
@@ -69,7 +69,7 @@ func TestSynchronizer_loopWithFn(t *testing.T) {
 	database.Init(rawDb)
 
 	consAdminHandlers := &admin.Handlers{}
-	consAdminHandlers.Init(1, database, mncrypto.Hasher([]byte(config.Configuration.Validator.SymmetricKey)), nil, make([]byte, constants.HashLen), objs.MakeMockStorageGetter(), nil)
+	consAdminHandlers.Init(1, database, mncrypto.Hasher([]byte(config.Configuration.Validator.SymmetricKey)), nil, make([]byte, constants.HashLen), objs.MakeMockStorageGetter())
 
 	sync := &Synchronizer{}
 	sync.Init(nil, nil, nil, nil, &gossip.Handlers{}, nil, nil, nil, consAdminHandlers, nil, nil, objs.MakeMockStorageGetter())
@@ -115,7 +115,7 @@ func TestSynchronizer_loopWithFn2(t *testing.T) {
 	database.Init(rawDb)
 
 	consAdminHandlers := &admin.Handlers{}
-	consAdminHandlers.Init(1, database, mncrypto.Hasher([]byte(config.Configuration.Validator.SymmetricKey)), nil, make([]byte, constants.HashLen), objs.MakeMockStorageGetter(), nil)
+	consAdminHandlers.Init(1, database, mncrypto.Hasher([]byte(config.Configuration.Validator.SymmetricKey)), nil, make([]byte, constants.HashLen), objs.MakeMockStorageGetter())
 
 	sync := &Synchronizer{}
 	sync.Init(nil, nil, nil, nil, &gossip.Handlers{}, nil, nil, nil, consAdminHandlers, nil, nil, objs.MakeMockStorageGetter())
@@ -161,7 +161,7 @@ func TestSynchronizer_loopWithLockedCondition(t *testing.T) {
 	database.Init(rawDb)
 
 	consAdminHandlers := &admin.Handlers{}
-	consAdminHandlers.Init(1, database, mncrypto.Hasher([]byte(config.Configuration.Validator.SymmetricKey)), nil, make([]byte, constants.HashLen), objs.MakeMockStorageGetter(), nil)
+	consAdminHandlers.Init(1, database, mncrypto.Hasher([]byte(config.Configuration.Validator.SymmetricKey)), nil, make([]byte, constants.HashLen), objs.MakeMockStorageGetter())
 
 	sync := &Synchronizer{}
 	sync.Init(nil, nil, nil, nil, &gossip.Handlers{}, nil, nil, nil, consAdminHandlers, nil, nil, objs.MakeMockStorageGetter())
@@ -205,7 +205,7 @@ func TestSynchronizer_SafeOk(t *testing.T) {
 	database.Init(rawDb)
 
 	consAdminHandlers := &admin.Handlers{}
-	consAdminHandlers.Init(1, database, mncrypto.Hasher([]byte(config.Configuration.Validator.SymmetricKey)), nil, make([]byte, constants.HashLen), objs.MakeMockStorageGetter(), nil)
+	consAdminHandlers.Init(1, database, mncrypto.Hasher([]byte(config.Configuration.Validator.SymmetricKey)), nil, make([]byte, constants.HashLen), objs.MakeMockStorageGetter())
 
 	sync := &Synchronizer{}
 	sync.Init(nil, nil, nil, nil, &gossip.Handlers{}, nil, nil, nil, consAdminHandlers, nil, nil, objs.MakeMockStorageGetter())
@@ -238,5 +238,4 @@ func TestSynchronizer_SafeOk(t *testing.T) {
 func stopSync(sync *Synchronizer) {
 	<-time.After(timeToStop)
 	sync.Stop()
-
 }

@@ -1,9 +1,11 @@
+//go:build flakes
+
 package dman
 
 import (
 	"testing"
 
-	"github.com/MadBase/MadNet/interfaces"
+	"github.com/alicenet/alicenet/interfaces"
 	"github.com/stretchr/testify/assert"
 )
 

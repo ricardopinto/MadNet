@@ -1,8 +1,8 @@
 package lstate
 
 import (
-	"github.com/MadBase/MadNet/consensus/db"
-	"github.com/MadBase/MadNet/consensus/objs"
+	"github.com/alicenet/alicenet/consensus/db"
+	"github.com/alicenet/alicenet/consensus/objs"
 	"github.com/dgraph-io/badger/v2"
 )
 
@@ -12,6 +12,13 @@ type Store struct {
 
 func (ss *Store) Init(database *db.Database) {
 	ss.database = database
+}
+
+// New Store wrapping a Database.
+func New(database *db.Database) *Store {
+	return &Store{
+		database: database,
+	}
 }
 
 func (ss *Store) LoadLocalState(txn *badger.Txn) (*RoundStates, error) {

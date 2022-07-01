@@ -1,7 +1,7 @@
 package interfaces
 
 import (
-	trie "github.com/MadBase/MadNet/badgerTrie"
+	trie "github.com/alicenet/alicenet/badgerTrie"
 	"github.com/dgraph-io/badger/v2"
 )
 
@@ -44,7 +44,7 @@ type Application interface {
 	StoreSnapShotStateData(txn *badger.Txn, key []byte, value []byte, data []byte) error
 	// GetSnapShotStateData retrieves value corresponding to key from the State Data
 	GetSnapShotStateData(txn *badger.Txn, key []byte) ([]byte, error)
-	// FinalizeSnapShotRoot validates snapshot root and corresponding data
+	// FinalizeSnapShotRoot validates snapshot root and corresponding state
 	FinalizeSnapShotRoot(txn *badger.Txn, root []byte, height uint32) error
 	// BeginSnapShotSync deletes the entries of the database in preparation
 	// for fast synchronization

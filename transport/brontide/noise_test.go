@@ -11,8 +11,8 @@ import (
 	"testing"
 	"testing/iotest"
 
-	"github.com/MadBase/MadNet/crypto/secp256k1"
-	"github.com/MadBase/MadNet/types"
+	"github.com/alicenet/alicenet/crypto/secp256k1"
+	"github.com/alicenet/alicenet/types"
 )
 
 const (
@@ -345,7 +345,7 @@ func TestBolt0008TestVectors(t *testing.T) {
 	responderPriv, responderPub := secp256k1.PrivKeyFromBytes(secp256k1.S256(),
 		responderKeyBytes)
 
-	// With the initiator's key data parsed, we'll now define a custom
+	// With the initiator's key state parsed, we'll now define a custom
 	// EphemeralGenerator function for the state machine to ensure that the
 	// initiator and responder both generate the ephemeral public key
 	// defined within the test vectors.

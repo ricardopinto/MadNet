@@ -6,8 +6,8 @@ BUILD() {
 }
 
 PRE_CHECK () {
-    # Check if madnet binary exists
-    if [ ! -f "./madnet" ]; then
+    # Check if alicenet binary exists
+    if [ ! -f "./alicenet" ]; then
         BUILD
     fi
     # Check that the generated directory exists
@@ -111,7 +111,7 @@ CHECK_EXISTING() {
 RUN_VALIDATOR() {
     # Run a validator
     CHECK_EXISTING $1
-    ./madnet --config ./scripts/generated/config/validator$1.toml validator
+    ./alicenet --config ./scripts/generated/config/validator$1.toml validator
 }
 
 RACE_VALIDATOR() {
@@ -123,7 +123,7 @@ RACE_VALIDATOR() {
 STATUS() {
     # Check validator status
     CHECK_EXISTING $1
-    ./madnet --config ./assets/config/validator$1.toml utils
+    ./alicenet --config ./assets/config/validator$1.toml utils
 }
 
 # init # - initalize validators directory files
@@ -141,6 +141,11 @@ STATUS() {
 PRE_CHECK $1
 case $1 in
     init)
+        WD=$PWD
+        BRIDGE=./bridge
+        cd $BRIDGE &&
+        npm ci &&
+        cd $WD &&
         ./scripts/base-scripts/init-githooks.sh
         CREATE_CONFIGS $2
     ;;
